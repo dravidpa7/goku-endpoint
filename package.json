@@ -1,0 +1,19 @@
+{
+  "name": "goku-count",
+  "version": "0.1.0-beta",
+  "description": "Use this package to count your GitHub streak.",
+  "license": "ISC",
+  "author": "dravid.p.a",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start":"node server.js",
+    "dev":"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}
