@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { json } from "express";
 import fetchContributions from "./lib/github.js";
-import buildSvg from "./lib/svg.js";
+import {buildSvg} from "./lib/svg.js";
 import { LongestStreak } from "./lib/logic.js";
 
 const app = express();
@@ -25,6 +25,23 @@ app.get("/api/contributions", async (req,res) => {
 
 app.get("/",(req,res)=>{
   res.send("GitHub Activity Graph API. Try /graph?username=dravidpa7");
+})
+
+app.get("/graph", async (req,res) => {
+    const username = req.query.username
+    if (!username) return res.status(400).send("username required");
+
+    try {
+        const data = await fetchContributions(username);
+        const streak = LongestStreak(data);
+        const svg = buildSvg(data.days);
+        res.setHeader("Content-Type", "image/svg+xml");
+        res.setHeader("Cache-Control", "public, max-age=3600");
+        res.send(svg);
+    } catch (err) {
+        res.status(500).send(`<svg xmlns="http://www.w3.org/2000/svg"><text y="20">${err.message}</text></svg>`);
+    }
+
 })
 
 app.listen(PORT,  () => console.log(`Server running on http://localhost:${PORT}`))
